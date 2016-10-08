@@ -3,7 +3,9 @@ var app = {
 
   //TODO: The current 'handleUsernameClick' function just toggles the class 'friend'
   //to all messages sent by the user
-  server: 'https://api.parse.com/1/classes/messages/',
+  server: 'http://127.0.0.1:3000/classes/messages',
+  serverRooms: 'http://127.0.0.1:3000/classes/rooms',
+  serverUsers: 'http://127.0.0.1:3000/classes/users',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
@@ -28,7 +30,6 @@ var app = {
     // Fetch previous messages
     app.startSpinner();
     app.fetch(false);
-
     // Poll for new messages
     setInterval(function() {
       app.fetch(true);
@@ -42,7 +43,7 @@ var app = {
     $.ajax({
       url: app.server,
       type: 'POST',
-      data: JSON.stringify(message),
+      data: message,
       success: function (data) {
         // Clear messages input
         app.$message.val('');
@@ -60,29 +61,48 @@ var app = {
     $.ajax({
       url: app.server,
       type: 'GET',
-      data: { order: '-createdAt' },
+      // data: { order: '-createdAt' },
       contentType: 'application/json',
       success: function(data) {
         // Don't bother if we have nothing to work with
+        //console.log(data.results[0].id);
         if (!data.results || !data.results.length) { return; }
 
         // Store messages for caching later
         app.messages = data.results;
 
         // Get the last message
-        var mostRecentMessage = data.results[data.results.length - 1];
+        var mostRecentMessage = data.results[0];
+        //console.log(mostRecentMessage.id, app.lastMessageId);
 
         // Only bother updating the DOM if we have a new message
-        if (mostRecentMessage.objectId !== app.lastMessageId) {
-          // Update the UI with the fetched rooms
-          app.renderRoomList(data.results);
+        if (mostRecentMessage.id !== app.lastMessageId) {
 
+          // Update the UI with the fetched rooms
+          
+          //app.renderRoomList(data.results);
           // Update the UI with the fetched messages
           app.renderMessages(data.results, animate);
 
           // Store the ID of the most recent message
-          app.lastMessageId = mostRecentMessage.objectId;
+          app.lastMessageId = mostRecentMessage.id;
+
+          app.fetchRooms(true);
         }
+      },
+      error: function(error) {
+        console.error('chatterbox: Failed to fetch messages', error);
+      }
+    });
+  },
+
+  fetchRooms: function(animate) {
+    $.ajax({
+      url: app.serverRooms,
+      type: 'GET',
+      contentType: 'application/json',
+      success: function(data) {
+        app.renderRoomList(data.results);
       },
       error: function(error) {
         console.error('chatterbox: Failed to fetch messages', error);

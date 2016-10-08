@@ -17,7 +17,7 @@ module.exports = {
     var query;
 
     if (options === 'messages') {
-      query = 'SELECT m.text, u.username, r.roomname, m.createdAt FROM messages m ' +
+      query = 'SELECT m.id, m.text, u.username, r.roomname, m.createdAt FROM messages m ' +
         'LEFT JOIN users u ON (u.id = m.userID) ' +
         'LEFT JOIN rooms r ON (r.id = m.roomID) ' +
         'ORDER BY m.createdAt DESC;';
@@ -36,12 +36,12 @@ module.exports = {
     var findUserID = 'SELECT id FROM users WHERE username = "' + reqBody.username + '";';
     var findRoomID = 'SELECT id FROM rooms WHERE roomname = "' + reqBody.roomname + '";';
     var query, userID, roomID;
-
     dbConnection.query(findUserID, function(err, rows) {
 
       if (!rows) {
         callback('username not found');    
       } else {
+        console.log(rows);
         userID = rows[0].id;
         dbConnection.query(findRoomID, function(err, rows2) {
           if (!rows2) {
@@ -49,7 +49,7 @@ module.exports = {
           } else {
             roomID = rows2[0].id;
             query = 'INSERT INTO messages (userID, roomID, text, createdAt) VALUES (' +
-              userID + ', ' + roomID + ', "' + reqBody.message + '", NOW());';
+              userID + ', ' + roomID + ', "' + reqBody.text + '", NOW());';
 
             dbConnection.query(query, function(err, rows3) {
               if (!err) {

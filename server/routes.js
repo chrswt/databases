@@ -15,4 +15,3 @@ router.get('/rooms', controller.rooms.get);
 router.post('/rooms', controller.rooms.post);
 
 module.exports = router;
-

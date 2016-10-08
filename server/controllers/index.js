@@ -1,3 +1,4 @@
+
 var models = require('../models');
 
 module.exports = {
@@ -5,6 +6,7 @@ module.exports = {
     get: function (req, res) {
       models.messages.get(function(data) {
         res.setHeader('Content-Type', 'application/json');
+        res.statusCode = 200;
         res.send(JSON.stringify({'results': data}));
       });
     }, // a function which handles a get request for all messages
@@ -65,4 +67,3 @@ module.exports = {
   }
 
 };
-
