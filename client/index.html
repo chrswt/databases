@@ -7,6 +7,10 @@
 
     <!-- dependencies -->
     <script src="./scripts/jquery-3.1.1.min.js"></script>
+    <script src="./scripts/remodal.min.js"></script>
+    <link rel="stylesheet" href="./styles/remodal.css">
+    <link rel="stylesheet" href="./styles/remodal-default.css">
+
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -25,7 +29,7 @@
     <div id="main">
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
-
+      <div class="user-action"></div>
       <div class="spinner"><img src="images/spiffygif_46x46.gif"></div>
       <div id="rooms">
         Room:
@@ -38,9 +42,26 @@
       </form>    </div>
     <div id="chats"></div>
 
+    <div class="remodal" data-remodal-id="modal">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      <h1>Login</h1>
+        <div>
+          <label>UserName</label>
+          <input placeholder="username" />
+        </div>
+        <div>
+          <label>Password</label>
+          <input type=password placeholder="password"/>
+        </div>
+      <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+      <button class="remodal-confirm">OK</button>
+    </div>
     <script>
-      $(function(){
-        app.init()
+      $(function() {
+        app.init();
       });
-    </script>  </body>
+    </script>  
+    <script src="./scripts/login.js"></script>
+    <script src="./scripts/cookies.js"></script>
+    </body>
 </html>

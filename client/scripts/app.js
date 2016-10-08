@@ -14,7 +14,9 @@ var app = {
 
   init: function() {
     // Get username
-    app.username = window.location.search.substr(10);
+    app.username = window.location.search.substr(10); 
+    // ANDREW TODO MUST CHANGE USERNAME SO PEOPLE CANNOT CHANGE WINDOW URL
+    // in fact lets change the entire window so it doesnt show username in url
 
     // Cache jQuery selectors
     app.$message = $('#message');
@@ -30,6 +32,8 @@ var app = {
     // Fetch previous messages
     app.startSpinner();
     app.fetch(false);
+
+    checkCookie();
     // Poll for new messages
     setInterval(function() {
       app.fetch(true);
