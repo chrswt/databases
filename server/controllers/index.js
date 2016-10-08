@@ -66,10 +66,25 @@ module.exports = {
 
   login: {
     check: function(req, res) {
-      console.log('controllers is calling models');
-      console.log('req = ', req.query);
       models.login.check(req.query, function(verified) {
         res.send(verified);
+      });
+    }
+  },
+
+  searchUsers: {
+    get: function(req, res) {
+      console.log('controller is calling search');
+      console.log(req.query);
+      models.searchUsers.get(req.query, function(results) {
+        console.log(results);
+        if (err) {
+          res.statusCode = 404;
+          res.send(JSON.stringify({'error': err}));
+        } else {
+          res.statusCode = 200;
+          res.send(results);
+        }
       });
     }
   }

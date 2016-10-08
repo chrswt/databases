@@ -88,3 +88,26 @@ form input[type=text] {
     background-color: #0090da;
 }
 
+.error-message {
+    color: red;
+    font-size: 11px;
+
+}
+
+.error-message-wrapper {
+  height: 20px;
+}
+
+.login-btn, .register-btn, .username-action, .logout-btn {
+  display: inline-block;
+  float: right;
+  padding-right: 10px;
+  margin-top: 5px;
+}
+
+#chats div:nth-child(even) {background-color: rgba(174,240,255,0.2)}
+#chats div:nth-child(odd) {background-color: rgba(0,209,255,0.2)}
+
+
+
+

@@ -12,10 +12,11 @@ var app = {
   lastMessageId: 0,
   friends: {},
   messages: [],
+  currentRoom: '',
 
   init: function() {
     // Get username
-    app.username = window.location.search.substr(10); 
+    app.username = getCookie('username');
     // ANDREW TODO MUST CHANGE USERNAME SO PEOPLE CANNOT CHANGE WINDOW URL
     // in fact lets change the entire window so it doesnt show username in url
 
@@ -52,7 +53,7 @@ var app = {
       success: function (data) {
         // Clear messages input
         app.$message.val('');
-
+        app.currentRoom = $( "#roomSelect" ).val();
         // Trigger a fetch to update the messages, pass true to animate
         app.fetch();
       },
@@ -93,12 +94,30 @@ var app = {
   },
 
   fetchRooms: function(animate) {
+    
+
     $.ajax({
       url: app.serverRooms,
       type: 'GET',
       contentType: 'application/json',
       success: function(data) {
         app.renderRoomList(data.results);
+
+      },
+      error: function(error) {
+        console.error('chatterbox: Failed to fetch messages', error);
+      }
+    });
+  },
+
+  createRoom: function(roomname) {
+    $.ajax({
+      url: app.serverRooms,
+      type: 'POST',
+      data: {roomname: roomname},
+      success: function(data) {
+        console.log(data);
+        $('select').material_select();
       },
       error: function(error) {
         console.error('chatterbox: Failed to fetch messages', error);
@@ -145,16 +164,19 @@ var app = {
           rooms[roomname] = true;
         }
       });
+      
     }
 
     // Select the menu option
-    app.$roomSelect.val(app.roomname);
+    app.$roomSelect.val(app.currentRoom);
+    $('select').material_select();
+    // $('#roomSelect')[0].selectize.setValue(app.currentRoom);
   },
 
   renderRoom: function(roomname) {
     // Prevent XSS by escaping with DOM methods
-    var $option = $('<option/>').val(roomname).text(roomname);
-
+    var $option = $('<option />').val(roomname).text(roomname);
+    
     // Add to select
     app.$roomSelect.append($option);
   },
@@ -217,6 +239,8 @@ var app = {
 
         // Select the menu option
         app.$roomSelect.val(roomname);
+
+        app.createRoom(roomname);
       }
     } else {
       app.startSpinner();
@@ -241,12 +265,16 @@ var app = {
   },
 
   startSpinner: function() {
-    $('.spinner img').show();
+    //$('.spinner img').show();
     $('form input[type=submit]').attr('disabled', 'true');
+    $('input#message').attr('disabled', 'true');
   },
 
   stopSpinner: function() {
-    $('.spinner img').fadeOut('fast');
-    $('form input[type=submit]').attr('disabled', null);
+    //$('.spinner img').fadeOut('fast');
+    if (getCookie('username') !== '') {
+      $('form input[type=submit]').attr('disabled', null);
+      $('input#message').attr('disabled', null);
+    }
   }
 };

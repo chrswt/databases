@@ -17,20 +17,47 @@ var checkUserCredentials = function(userInput, callback) {
   });
 };
 
+var register = function(userInput, callback) {
+  $.ajax({
+    url: app.serverUsers,
+    type: 'POST',
+    data: userInput,
+    success: function(validated) {
+      console.log('login.js AJAX  call SUCCESS!!');
+      callback(true);
+    },
+    error: function(err) {
+      console.log('login.js AJAX FAILURE :((');
+      console.log(err);
+      callback(false);
+    }
+  });
+};
+
+var clearInputFields = function() {
+  $('.username').val('');
+  $('.password').val('');
+  $('.confirm-password').val('');
+};
+
 // LOGIN BUTTON & REGISTER BUTTON
 var renderLoginBtn = function() {
+  $('.submit').attr('disabled', 'true');
+  $('input#message').attr('disabled', 'true');
   $('.user-action').html('<button class="login-btn">Login</button>');
   $('.user-action').append('<button class="register-btn">Register</button>');
 };
 
 // Username INFO TAB <edit profile> & LOGOUT button
 var renderLogoutInfo = function(user) {
-  $('.user-action').html('<div class="username">' + user + '</div>');
-  $('.user-action').append('<button class="logout-btn">Logout</button>');
+  $('.submit').attr('disabled', null);
+  $('input#message').attr('disabled', null);
+  $('.user-action').html('<button class="logout-btn">Logout</button>');
+  $('.user-action').append('<div class="username-action">' + user + '</div>');
 };
 
 //ONCLICK handlers
-$('#main').on('click', '.login-btn', function() {
+$('.user-action').on('click', '.login-btn', function() {
   console.log('login');
   $('.modal-title').text('Login');
   $('.confirm-password').hide();
@@ -47,34 +74,56 @@ $('#main').on('click', '.login-btn', function() {
 
     checkUserCredentials(userInput, function(validated) {
       if (validated === true) {
-        console.log('YES YOU ARE RIGHT PASSWORD VERY NICE');
         instance.close();
-        // hide click and login buttons
-        // show user info and logout buttons!
+        clearInputFields();
+        setCookie('username', username, 30);
+        checkCookie();
+
       } else if (validated === false) {
-        $('.modal-title').text('Incorrect password. Please try again.');
-        console.log('YOU ARE WRONG PASSWORD');
+        $('.error-message').text('Incorrect password. Please try again.').fadeIn().delay(2000).fadeOut();
       } else {
-        $('.modal-title').text('Username does not exist. Please register.');
+        $('.error-message').text('Username does not exist. Please register.').fadeIn().delay(2000).fadeOut();
       }
     });
 
   });
 });
 
-$('#main').on('click', '.register-btn', function() {
+$('.user-action').on('click', '.register-btn', function() {
   console.log('register');
   $('.modal-title').text('Register');
   $('.confirm-password').show();
   var instance = $('.remodal').remodal();
   instance.open();
+
+  $('.remodal-confirm').on('click', function() {
+    var username = $('.username').val();
+    var password = $('.password').val();
+    console.log(username, password);
+
+    var userInput = {username: username, password: password};
+
+    register(userInput, function(success) {
+      if (success) {
+        instance.close();
+        clearInputFields();
+        console.log('registration success!!');
+        console.log('username is registered: ', username);
+        setCookie('username', username, 30);
+        checkCookie();
+      } else {
+        $('.error-message').text('Username is Taken!').fadeIn().delay(2000).fadeOut();
+      }
+    });
+  });
+
 });
 
-$('#main').on('click', '.logout-btn', function() {
-  console.log('logout');
-  // set cookie to null
-  // hide userinfo tab
-  // show loginregister tab
+$('.user-action').on('click', '.logout-btn', function() {
+  console.log("logout");
+  setCookie('username', '', 30);
+  checkCookie();
 });
+
 
 

@@ -44,9 +44,18 @@ module.exports = {
 
   login: {
     check: function(reqQuery, callback) {
-      console.log('models is calling database');
       db.checkUserCredentials(reqQuery, function(verified) {
         callback(verified);
+      });
+    }
+  },
+
+  searchUsers: {
+    get: function(reqQuery, callback) {
+      console.log('model is calling database');
+      db.searchUsers(reqQuery, function(results) {
+        console.log(results);
+        callback(results);
       });
     }
   }
