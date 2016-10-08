@@ -18,6 +18,6 @@ router.post('/rooms', controller.rooms.post);
 
 router.get('/login', controller.login.check);
 
-router.get('/searchusers', controller.search.get);
+router.get('/searchusers', controller.searchUsers.get);
 
 module.exports = router;

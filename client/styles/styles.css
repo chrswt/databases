@@ -6,7 +6,7 @@ body {
 }
 
 #main, #chats {
-    width: 500px;
+    width: 65vw;
     margin: auto;
     text-align: left;
     background: white;
@@ -105,9 +105,31 @@ form input[type=text] {
   margin-top: 5px;
 }
 
-#chats div:nth-child(even) {background-color: rgba(174,240,255,0.2)}
-#chats div:nth-child(odd) {background-color: rgba(0,209,255,0.2)}
+/*#chats div:nth-child(even) {background-color: rgba(174,240,255,0.2)}
+#chats div:nth-child(odd) {background-color: rgba(0,209,255,0.2)}*/
 
 
 
+.row.chat {
+  padding: 0px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.chat-info {
+  border-right: 1px solid black;
+}
+
+.roomname-chat {
+  text-align: center;
+}
+
+.username-chat {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.timestamp-chat {
+  text-align: right;
+}
 

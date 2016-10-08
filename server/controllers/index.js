@@ -9,7 +9,7 @@ module.exports = {
         res.statusCode = 200;
         res.send(JSON.stringify({'results': data}));
       });
-    }, // a function which handles a get request for all messages
+    },
     post: function (req, res) {
       models.messages.post(req.body, function(err) {
         if (err) {
@@ -20,7 +20,7 @@ module.exports = {
           res.send();
         }
       });
-    } // a function which handles posting a message to the database
+    }
   },
 
   users: {
@@ -77,13 +77,13 @@ module.exports = {
       console.log('controller is calling search');
       console.log(req.query);
       models.searchUsers.get(req.query, function(results) {
-        console.log(results);
-        if (err) {
-          res.statusCode = 404;
-          res.send(JSON.stringify({'error': err}));
-        } else {
+        if (results) {
           res.statusCode = 200;
-          res.send(results);
+          res.send(JSON.stringify({'results': results}));
+
+        } else {
+          res.statusCode = 404;
+          res.send(JSON.stringify({'error': 'no post by this user'}));
         }
       });
     }

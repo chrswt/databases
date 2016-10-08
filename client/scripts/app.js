@@ -7,6 +7,7 @@ var app = {
   serverRooms: 'http://127.0.0.1:3000/classes/rooms',
   serverUsers: 'http://127.0.0.1:3000/classes/users',
   serverLogin: 'http://127.0.0.1:3000/classes/login',
+  serverSearchUsers: 'http://127.0.0.1:3000/classes/searchusers',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
@@ -129,18 +130,23 @@ var app = {
     app.$chats.html('');
   },
 
-  renderMessages: function(messages, animate) {
+  renderMessages: function(messages, animate, search) {
     // Clear existing messages`
+    console.log(messages);
     app.clearMessages();
     app.stopSpinner();
-    if (Array.isArray(messages)) {
-      // Add all fetched messages that are in our current room
-      messages
-        .filter(function(message) {
-          return message.roomname === app.roomname ||
-                 app.roomname === 'lobby' && !message.roomname;
-        })
-        .forEach(app.renderMessage);
+    if (search) {
+      messages.forEach(app.renderMessage);
+    } else {
+      if (Array.isArray(messages)) {
+        // Add all fetched messages that are in our current room
+        messages
+          .filter(function(message) {
+            return message.roomname === app.roomname ||
+                   app.roomname === 'lobby' && !message.roomname;
+          })
+          .forEach(app.renderMessage);
+      }
     }
 
     // Make it scroll to the top
@@ -187,22 +193,49 @@ var app = {
     }
 
     // Create a div to hold the chats
-    var $chat = $('<div class="chat"/>');
+    var $chat = $('<div class="row chat"/>');
 
-    // Add in the message data using DOM methods to avoid XSS
-    // Store the username in the element's data attribute
-    var $username = $('<span class="username"/>');
-    $username.text(message.username + ': ').attr('data-roomname', message.roomname).attr('data-username', message.username).appendTo($chat);
+    $chat.append('<div class="col s4 chat-info">' +
+          '<div class="row">' +
+            '<div class="col s12 username-chat"><i class="fa fa-user fa-lg"></i> ' + message.username + '</div>' +
+          '</div>' +
+          '<div class="row">' +
+            '<div class="col s12 roomname-chat"><i class="fa fa-users" aria-hidden="true"> ' + message.roomname + '</i></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="col s8 chat-description">' +
+          '<div class="row">' +
+            '<div class="col s12 timestamp-chat"><i class="fa fa-clock-o" aria-hidden="true"></i> ' + moment(message.createdAt).twitterShort() + '</div>' +
+          '</div>' +
+          '<div class="row">' +
+            '<div class="col s12 message-chat">' + message.text + '</div>' +
+          '</div>');
 
-    // Add the friend class
-    if (app.friends[message.username] === true) {
-      $username.addClass('friend');
-    }
 
-    var $message = $('<br><span/>');
-    $message.text(message.text).appendTo($chat);
+    // var $username = $('<div class="col s12 username-chat">');
+    // $username.append('<i class="fa fa-user fa-lg"></i> ' +  ).appendTo($chat);
 
-    // Add the message to the UI
+
+    // // Add in the message data using DOM methods to avoid XSS
+    // // Store the username in the element's data attribute
+    // var $roomname = $('<div class="roomname-chat" />');
+    // $roomname.text(message.roomname).appendTo($chat);
+
+    // var $timestamp = $('<div class="timestamp" />');
+    // $timestamp.text(moment(message.createdAt).twitterShort()).appendTo($chat);
+
+    // var $username = $('<span class="username"/>');
+    // $username.text(message.username + ': ').attr('data-roomname', message.roomname).attr('data-username', message.username).appendTo($chat);
+
+    // // Add the friend class
+    // if (app.friends[message.username] === true) {
+    //   $username.addClass('friend');
+    // }
+
+    // var $message = $('<br><span/>');
+    // $message.text(message.text).appendTo($chat);
+
+    // // Add the message to the UI
     app.$chats.append($chat);
 
   },

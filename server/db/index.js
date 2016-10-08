@@ -108,20 +108,35 @@ module.exports = {
     console.log('Checking user input FROM SERVER SIDE: ', userInput);
     var username = userInput.username;
     var password = userInput.password;
-    console.log('username, password', username, password);
     var userQuery = 'SELECT * FROM users WHERE username = "' + username + '";';
 
     dbConnection.query(userQuery, function(err, rows) {
       if (rows.length === 0) {
         callback('Username not found');
       } else {
-        console.log('row data', rows[0].password);
         var correctPassword = rows[0].password;
         if (correctPassword === password) {
           callback(true);
         } else {
           callback(false);
         }
+      }
+    });
+  },
+
+  searchUsers: function(reqQuery, callback) {
+    console.log('Database received query: ', reqQuery);
+    var userSearchQuery = 'SELECT r.roomname, u.username, m.text, m.createdAt from messages m ' + 
+      'LEFT JOIN users u ON (u.id = m.userID) ' +
+      'LEFT JOIN rooms r ON (r.id = m.roomID) ' +
+      'WHERE u.username="' + reqQuery.query + '" ORDER BY m.createdAt DESC;';
+    console.log(userSearchQuery);
+    dbConnection.query(userSearchQuery, function(err, rows) {
+      console.log(rows);
+      if (rows.length === 0) {
+        callback();
+      } else {
+        callback(rows);
       }
     });
   }

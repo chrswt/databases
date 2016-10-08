@@ -7,11 +7,9 @@ var checkUserCredentials = function(userInput, callback) {
     type: 'GET',
     data: userInput,
     success: function(validated) {
-      console.log('login.js AJAX  call SUCCESS!!');
       callback(validated);
     },
     error: function(err) {
-      console.log('login.js AJAX FAILURE :((');
       console.log(err);
     }
   });
@@ -23,11 +21,9 @@ var register = function(userInput, callback) {
     type: 'POST',
     data: userInput,
     success: function(validated) {
-      console.log('login.js AJAX  call SUCCESS!!');
       callback(true);
     },
     error: function(err) {
-      console.log('login.js AJAX FAILURE :((');
       console.log(err);
       callback(false);
     }
@@ -65,10 +61,8 @@ $('.user-action').on('click', '.login-btn', function() {
   instance.open();
 
   $('.remodal-confirm').on('click', function() {
-    console.log('hey log me in fool');
     var username = $('.username').val();
     var password = $('.password').val();
-    console.log(username, password);
 
     var userInput = {username: username, password: password};
 
@@ -78,14 +72,12 @@ $('.user-action').on('click', '.login-btn', function() {
         clearInputFields();
         setCookie('username', username, 30);
         checkCookie();
-
       } else if (validated === false) {
         $('.error-message').text('Incorrect password. Please try again.').fadeIn().delay(2000).fadeOut();
       } else {
         $('.error-message').text('Username does not exist. Please register.').fadeIn().delay(2000).fadeOut();
       }
     });
-
   });
 });
 
@@ -107,8 +99,6 @@ $('.user-action').on('click', '.register-btn', function() {
       if (success) {
         instance.close();
         clearInputFields();
-        console.log('registration success!!');
-        console.log('username is registered: ', username);
         setCookie('username', username, 30);
         checkCookie();
       } else {
@@ -120,10 +110,6 @@ $('.user-action').on('click', '.register-btn', function() {
 });
 
 $('.user-action').on('click', '.logout-btn', function() {
-  console.log("logout");
   setCookie('username', '', 30);
   checkCookie();
 });
-
-
-
