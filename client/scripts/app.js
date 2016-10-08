@@ -6,6 +6,7 @@ var app = {
   server: 'http://127.0.0.1:3000/classes/messages',
   serverRooms: 'http://127.0.0.1:3000/classes/rooms',
   serverUsers: 'http://127.0.0.1:3000/classes/users',
+  serverLogin: 'http://127.0.0.1:3000/classes/login',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
@@ -69,28 +70,19 @@ var app = {
       contentType: 'application/json',
       success: function(data) {
         // Don't bother if we have nothing to work with
-        //console.log(data.results[0].id);
         if (!data.results || !data.results.length) { return; }
-
         // Store messages for caching later
         app.messages = data.results;
-
         // Get the last message
         var mostRecentMessage = data.results[0];
-        //console.log(mostRecentMessage.id, app.lastMessageId);
 
-        // Only bother updating the DOM if we have a new message
         if (mostRecentMessage.id !== app.lastMessageId) {
-
           // Update the UI with the fetched rooms
-          
-          //app.renderRoomList(data.results);
+          app.renderRoomList(data.results);
           // Update the UI with the fetched messages
           app.renderMessages(data.results, animate);
-
           // Store the ID of the most recent message
           app.lastMessageId = mostRecentMessage.id;
-
           app.fetchRooms(true);
         }
       },

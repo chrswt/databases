@@ -44,14 +44,18 @@
 
     <div class="remodal" data-remodal-id="modal">
       <button data-remodal-action="close" class="remodal-close"></button>
-      <h1>Login</h1>
+      <h1 class="modal-title"></h1>
         <div>
-          <label>UserName</label>
-          <input placeholder="username" />
+          <label>Username</label>
+          <input class="username" placeholder="username" />
         </div>
-        <div>
+        <div class="password-container">
           <label>Password</label>
-          <input type=password placeholder="password"/>
+          <input class="password" type=password placeholder="password"/>
+        </div>
+        <div class="confirm-password">
+          <label>Confirm password</label>
+          <input class="confirm-password" type=password placeholder="Reenter password" />
         </div>
       <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
       <button class="remodal-confirm">OK</button>

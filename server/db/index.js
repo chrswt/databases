@@ -102,6 +102,28 @@ module.exports = {
         });
       }
     });
+  },
+
+  checkUserCredentials: function(userInput, callback) {
+    console.log('Checking user input FROM SERVER SIDE: ', userInput);
+    var username = userInput.username;
+    var password = userInput.password;
+    console.log('username, password', username, password);
+    var userQuery = 'SELECT * FROM users WHERE username = "' + username + '";';
+
+    dbConnection.query(userQuery, function(err, rows) {
+      if (rows.length === 0) {
+        callback('Username not found');
+      } else {
+        console.log('row data', rows[0].password);
+        var correctPassword = rows[0].password;
+        if (correctPassword === password) {
+          callback(true);
+        } else {
+          callback(false);
+        }
+      }
+    });
   }
 
 };

@@ -24,16 +24,13 @@ module.exports = {
   },
 
   users: {
-    // Ditto as above
     get: function (req, res) {
-      //used for logging in
       models.users.get(function(data) {
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({'results': data}));
       });
     },
     post: function (req, res) {
-      console.log('POST REQUEST USER: ', req);
       models.users.post(req.body, function(err) {
         if (err) {
           res.statusCode = 404;
@@ -44,6 +41,7 @@ module.exports = {
         }
       });
     }
+
   },
   
   rooms: {
@@ -62,6 +60,16 @@ module.exports = {
           res.statusCode = 200;
           res.send(); 
         }
+      });
+    }
+  },
+
+  login: {
+    check: function(req, res) {
+      console.log('controllers is calling models');
+      console.log('req = ', req.query);
+      models.login.check(req.query, function(verified) {
+        res.send(verified);
       });
     }
   }

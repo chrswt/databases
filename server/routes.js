@@ -14,4 +14,6 @@ router.get('/rooms', controller.rooms.get);
 
 router.post('/rooms', controller.rooms.post);
 
+router.get('/login', controller.login.check);
+
 module.exports = router;
