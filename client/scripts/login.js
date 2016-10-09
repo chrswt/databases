@@ -63,11 +63,11 @@ $('.user-action').on('click', '.login-btn', function() {
   $('.remodal-confirm').on('click', function() {
     var username = $('.username').val();
     var password = $('.password').val();
-
     var userInput = {username: username, password: password};
 
     checkUserCredentials(userInput, function(validated) {
       if (validated === true) {
+        console.log('validated');
         instance.close();
         clearInputFields();
         setCookie('username', username, 30);
@@ -91,8 +91,6 @@ $('.user-action').on('click', '.register-btn', function() {
   $('.remodal-confirm').on('click', function() {
     var username = $('.username').val();
     var password = $('.password').val();
-    console.log(username, password);
-
     var userInput = {username: username, password: password};
 
     register(userInput, function(success) {
@@ -110,6 +108,6 @@ $('.user-action').on('click', '.register-btn', function() {
 });
 
 $('.user-action').on('click', '.logout-btn', function() {
-  setCookie('username', '', 30);
+  setCookie('username', '');
   checkCookie();
 });

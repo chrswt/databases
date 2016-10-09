@@ -1,12 +1,15 @@
 var setCookie = function(name, value, days) {
+  console.log('setting cookie to: ', value);
   if (days) {
     var date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     var expires = '; expires=' + date.toGMTString();
   } else {
     var expires = '';
-    document.cookie = name + '=' + value + expires + ';path=/';
   }
+    
+  document.cookie = name + '=' + value + expires + ';path=/';
+  
 };
 
 var getCookie = function(cname) {
@@ -27,13 +30,11 @@ var getCookie = function(cname) {
 
 var checkCookie = function() {
   var user = getCookie('username');
-
+  console.log('checking cookie, user = ', user);
   if (user !== '') {
-    console.log('user exists', user);
     app.username = getCookie('username');
     renderLogoutInfo(user);
   } else {
-    console.log('usernoexist');
     app.username = '';
     renderLoginBtn();
   }

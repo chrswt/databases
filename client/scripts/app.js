@@ -54,7 +54,7 @@ var app = {
       success: function (data) {
         // Clear messages input
         app.$message.val('');
-        app.currentRoom = $( "#roomSelect" ).val();
+        app.currentRoom = $('#roomSelect').val();
         // Trigger a fetch to update the messages, pass true to animate
         app.fetch();
       },
@@ -132,7 +132,6 @@ var app = {
 
   renderMessages: function(messages, animate, search) {
     // Clear existing messages`
-    console.log(messages);
     app.clearMessages();
     app.stopSpinner();
     if (search) {
